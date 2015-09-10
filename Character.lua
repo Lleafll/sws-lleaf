@@ -122,52 +122,237 @@ function CharacterModule:AddToStatsPane()
     end
 end
 
-function CharacterModule:CalculateTotalScore(spec)
-	if(ScoreCache[spec.Name]) then
-		return ScoreCache[spec.Name]
-	end
+do
+	local baseAttributes = {
+		WARRIOR = {
+			agi = 889,
+			int = 711,
+			str = 1455,
+			spi = 679,
+		},
+		PALADIN = {
+			agi = 455,
+			int = 1042,
+			str = 1455,
+			spi = 782,
+		},
+		HUNTER = {
+			agi = 1284,
+			int = 854,
+			str = 886,
+			spi = 711,
+		},
+		ROGUE = {
+			agi = 1284,
+			int = 711,
+			str = 1206,
+			spi = 533,
+		},
+		PRIEST = {
+			agi = 1067,
+			int = 1042,
+			str = 843,
+			spi = 782,
+		},
+		DEATHKNIGHT = {
+			agi = 1071,
+			int = 569,
+			str = 1455,
+			spi = 640,
+		},
+		SHAMAN = {
+			agi = 1284,
+			int = 1042,
+			str = 626,
+			spi = 782,
+		},
+		MAGE = {
+			agi = 889,
+			int = 1042,
+			str = 647,
+			spi = 1155,
+		},
+		WARLOCK = {
+			agi = 985,
+			int = 1042,
+			str = 551,
+			spi = 1155,
+		},
+		MONK = {
+			agi = 1284,
+			int = 1042,
+			str = 626,
+			spi = 782,
+		},
+		DRUID = {
+			agi = 1284,
+			int = 1042,
+			str = 626,
+			spi = 782,
+		},
+	}
+	
+	local raceMods = {
+		Human = {
+			versatility = 100,  -- The Human Spirit
+		},
+		Dwarf = {
+			agi = -4,
+			int = -1,
+			str = 5,
+			sta = 1,
+			spi = -1,
+		},
+		NightElf = {
+			agi = 4,
+			str = -4,
+			-- 3 % dodge?
+		},
+		Orc = {
+			agi = -3,
+			int = -3,
+			str = 3,
+			sta = 1,
+			spi = 2,
+		},
+		Tauren = {
+			agi = -4,
+			int = -4,
+			str = 5,
+			sta = 1 + 197,  -- Endurance
+			spi = 2,
+		},
+		Undead = {
+			agi = -2,
+			int = -2,
+			str = -1,
+			spi = 5,
+		},
+		Gnome = {
+			agi = 2,
+			int = 3,
+			str = -5,
+			haste = 90,  -- Nimble Fingers
+		},
+		Troll = {
+			agi = 2,
+			int = -4,
+			str = 1,
+			spi = 1,
+			-- Berserking?
+		},
+		BloodElf = {
+			agi = 2,
+			int = 3,
+			str = -3,
+			spi = -2,
+			crit = 110,
+		},
+		Draenei = {
+			agi = -3 + 65,  -- Heroic Presence
+			int = 65  -- Heroic Presence
+			str = 1 + 65,  -- Heroic Presence
+			spi = 2,
+		},
+		Goblin = {
+			agi = 2,
+			int = 3,
+			str = -3,
+			spi = -2,
+			haste = 90,  -- Time is Money
+		},
+		Worgen = {
+			agi = 2,
+			int = -4,
+			str = 3,
+			spi = -1,
+			crit = 110,  -- Visiousness
+		},
+		Pandaren = {
+			agi = -2,
+			int = -1,
+			sta = 1,
+			spi = 2,
+			-- Epicurean?
+		},
+	}
+	
+	local specMods = {
+		263 = {  -- Enhancement
+			1 = {
+				stat = "crit",
+				amount = 1110
+			},
+		},
+	}
+	
+	function CharacterModule:CalculateTotalScore(spec)
+		if(ScoreCache[spec.Name]) then
+			return ScoreCache[spec.Name]
+		end
 
-	local specScore = 0;
+		local specScore = 0;
 
-	for i = 0, 19 do
-		local link = GetInventoryItemLink("player", i);
-		if(link) then
-			local _, _, _, _, _, _, _, _, loc = GetItemInfo(link);
-			local score = ScoreModule:CalculateItemScore(link, loc, ScanningTooltipModule:ScanTooltip(link), spec);
-			if(score) then
-				if(i == 17 and score.Offhand) then
-					specScore = specScore + score.Offhand;
-				else
-					specScore = specScore + score.Score;
+		for i = 0, 19 do
+			local link = GetInventoryItemLink("player", i);
+			if(link) then
+				local _, _, _, _, _, _, _, _, loc = GetItemInfo(link);
+				local score = ScoreModule:CalculateItemScore(link, loc, ScanningTooltipModule:ScanTooltip(link), spec);
+				if(score) then
+					if(i == 17 and score.Offhand) then
+						specScore = specScore + score.Offhand;
+					else
+						specScore = specScore + score.Score;
+					end
 				end
 			end
 		end
-	end
-	
-	
-	local function calculateScore(alias, amount)
-		local weights = SpecModule:GetWeights(spec)
-		local weight = weights[alias]
-		return (weight or 0) * amount
-	end
-	
-	-- base attributes
-	specScore = specScore + calculateScore("str", 840)
-	specScore = specScore + calculateScore("agi", 1069)
-	specScore = specScore + calculateScore("int", 1045)
-	specScore = specScore + calculateScore("sta", 890)
-	specScore = specScore + calculateScore("spi", 780)
-	specScore = specScore + calculateScore("crit", 660)  -- 6%
-	specScore = specScore + calculateScore("mastery", 880)  -- 25% (Shadow)
-	-- dodge?
-	-- raid buffs
-	specScore = specScore + calculateScore("mastery", 550)
-	specScore = specScore + calculateScore("haste", 450)
-	specScore = specScore + calculateScore("crit", 550)
-	specScore = specScore + calculateScore("multistrike", 330)
-	specScore = specScore + calculateScore("versatility", 390)
-	
+		
+		
+		if UnitLevel("player") == 100 then
+			local weights = SpecModule:GetWeights(spec)
+			local function calculateScore(alias, amount)
+				local weight = weights[alias]
+				return (weight or 0) * amount
+			end
+			local _, class = UnitClass("player")
+			local att = baseAttributes[class]
+			local _, race = UnitRace("player")
+			local rmods = raceMods[race]
+			if race == "NightElf" then  -- Touch of Elune
+				local hour = GetGameTime()  -- might be better to check some hidden flag or something
+				if hour >= 6 and < 18 then
+					rmods.crit = 110
+					rmods.haste = 0
+				else
+					rmods.crit = 0
+					rmods.haste = 90
+				end
+			end
+			local spec = GetSpecializationInfo(GetSpecialization())
+			local smods = specMods[spec]
+			
+			-- base attributes
+			specScore = specScore + calculateScore("str", att.str + (rmods.str or 0))
+			specScore = specScore + calculateScore("agi", att.agi + (rmods.agi or 0))
+			specScore = specScore + calculateScore("int", att.int + (rmods.int or 0))
+			specScore = specScore + calculateScore("sta", 890 + (rmods.sta or 0))
+			specScore = specScore + calculateScore("spi", att.spi + (rmods.spi or 0))
+			specScore = specScore + calculateScore("crit", 550 + (rmods.crit or 0) + (smods and smods.crit or 0))  -- 6%
+			specScore = specScore + calculateScore("haste", rmods.haste or 0)
+			specScore = specScore + calculateScore("mastery", 880)  -- true for all specs
+			specScore = specScore + calculateScore("versatility", rmods.versatility or 0)
+			-- dodge?
+			-- raid buffs
+			specScore = specScore + calculateScore("mastery", 550)
+			specScore = specScore + calculateScore("haste", 450)
+			specScore = specScore + calculateScore("crit", 550)
+			specScore = specScore + calculateScore("multistrike", 330)
+			specScore = specScore + calculateScore("versatility", 390)
+		end
+		
 
-	ScoreCache[spec.Name] = specScore;
-	return specScore;
+		ScoreCache[spec.Name] = specScore;
+		return specScore;
+	end
 end
