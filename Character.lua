@@ -123,27 +123,51 @@ function CharacterModule:AddToStatsPane()
 end
 
 function CharacterModule:CalculateTotalScore(spec)
-    if(ScoreCache[spec.Name]) then
-        return ScoreCache[spec.Name]
-    end
+	if(ScoreCache[spec.Name]) then
+		return ScoreCache[spec.Name]
+	end
 
-    local specScore = 0;
+	local specScore = 0;
 
-    for i = 0, 19 do
-        local link = GetInventoryItemLink("player", i);
-        if(link) then
-            local _, _, _, _, _, _, _, _, loc = GetItemInfo(link);
-            local score = ScoreModule:CalculateItemScore(link, loc, ScanningTooltipModule:ScanTooltip(link), spec);
-            if(score) then
-                if(i == 17 and score.Offhand) then
-                    specScore = specScore + score.Offhand;
-                else
-                    specScore = specScore + score.Score;
-                end
-            end
-        end
-    end
+	for i = 0, 19 do
+		local link = GetInventoryItemLink("player", i);
+		if(link) then
+			local _, _, _, _, _, _, _, _, loc = GetItemInfo(link);
+			local score = ScoreModule:CalculateItemScore(link, loc, ScanningTooltipModule:ScanTooltip(link), spec);
+			if(score) then
+				if(i == 17 and score.Offhand) then
+					specScore = specScore + score.Offhand;
+				else
+					specScore = specScore + score.Score;
+				end
+			end
+		end
+	end
+	
+	
+	local function calculateScore(alias, amount)
+		local weights = SpecModule:GetWeights(spec)
+		local weight = weights[alias]
+		return (weight or 0) * amount
+	end
+	
+	-- base attributes
+	specScore = specScore + calculateScore("str", 840)
+	specScore = specScore + calculateScore("agi", 1069)
+	specScore = specScore + calculateScore("int", 1045)
+	specScore = specScore + calculateScore("sta", 890)
+	specScore = specScore + calculateScore("spi", 780)
+	specScore = specScore + calculateScore("crit", 660)  -- 6%
+	specScore = specScore + calculateScore("mastery", 880)  -- 25% (Shadow)
+	-- dodge?
+	-- raid buffs
+	specScore = specScore + calculateScore("mastery", 550)
+	specScore = specScore + calculateScore("haste", 450)
+	specScore = specScore + calculateScore("crit", 550)
+	specScore = specScore + calculateScore("multistrike", 330)
+	specScore = specScore + calculateScore("versatility", 390)
+	
 
-    ScoreCache[spec.Name] = specScore;
-    return specScore;
+	ScoreCache[spec.Name] = specScore;
+	return specScore;
 end
