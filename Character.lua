@@ -250,7 +250,7 @@ do
 		},
 		Draenei = {
 			agi = -3 + 65,  -- Heroic Presence
-			int = 65  -- Heroic Presence
+			int = 65,  -- Heroic Presence
 			str = 1 + 65,  -- Heroic Presence
 			spi = 2,
 		},
@@ -278,11 +278,8 @@ do
 	}
 	
 	local specMods = {
-		263 = {  -- Enhancement
-			1 = {
-				stat = "crit",
-				amount = 1110
-			},
+		[263] = {  -- Enhancement
+			crit = 1110,
 		},
 	}
 	
@@ -321,7 +318,7 @@ do
 			local rmods = raceMods[race]
 			if race == "NightElf" then  -- Touch of Elune
 				local hour = GetGameTime()  -- might be better to check some hidden flag or something
-				if hour >= 6 and < 18 then
+				if hour >= 6 and hour < 18 then
 					rmods.crit = 110
 					rmods.haste = 0
 				else
@@ -330,7 +327,7 @@ do
 				end
 			end
 			local spec = GetSpecializationInfo(GetSpecialization())
-			local smods = specMods[spec]
+			local smods = specMods[tostring(spec)]
 			
 			-- base attributes
 			specScore = specScore + calculateScore("str", att.str + (rmods.str or 0))
