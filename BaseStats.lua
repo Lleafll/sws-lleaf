@@ -2,9 +2,11 @@ local SWS_ADDON_NAME, StatWeightScore = ...;
 local BaseStatsModule = StatWeightScore:NewModule(SWS_ADDON_NAME.."BaseStats");
 
 local SpecModule;
+local StatsModule;
 
 function BaseStatsModule:OnInitialize()
     SpecModule = StatWeightScore:GetModule(SWS_ADDON_NAME.."Spec");
+	StatsModule = StatWeightScore:GetModule(SWS_ADDON_NAME.."Stats");
 end	
 
 local baseAttributes = {
@@ -212,6 +214,25 @@ function BaseStatsModule:GetBaseScore(spec)
 	baseScore = baseScore + calculateScore("crit", 550)
 	baseScore = baseScore + calculateScore("multistrike", 330)
 	baseScore = baseScore + calculateScore("versatility", 390)
+	
+	-- buff food, flask, rune
+	local bestFoodStatWeight = 0;
+	local bestFlaskStatWeight = 0;
+	for stat, weight in pairs(weights) do
+		local statInfo = StatsModule:GetStatInfo(stat);
+		if(statInfo.Gem) then
+			if(weight > bestFoodStatWeight) then
+				bestFoodStatWeight = weight;
+			end
+		end
+		if(statInfo.Primary) then
+			if(weight > bestFlaskStatWeight) then
+				bestFlaskStatWeight = weight;
+			end
+		end
+	end
+	baseScore = baseScore + 125 * bestFoodStatWeight;
+	baseScore = baseScore + 300 * bestFlaskStatWeight;  -- Flask + Rune
 	
 	return baseScore
 end
