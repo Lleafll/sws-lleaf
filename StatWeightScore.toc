@@ -28,5 +28,6 @@ Tooltip.lua
 ImportExport.lua
 Options.lua
 Item.lua
+BaseStats.lua
 Character.lua
 Test.lua
