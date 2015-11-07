@@ -108,7 +108,7 @@ local raceMods = {
 		sta = 1 + 197,  -- Endurance
 		spi = 2,
 	},
-	Undead = {
+	Scourge = {
 		agi = -2,
 		int = -2,
 		str = -1,
