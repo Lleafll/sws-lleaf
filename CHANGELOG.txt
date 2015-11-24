@@ -1,1 +1,1 @@
-http://necroskillz.github.io/StatWeightScore
+https://github.com/Necroskillz/StatWeightScore
