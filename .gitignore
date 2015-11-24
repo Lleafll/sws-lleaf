@@ -1,8 +1,0 @@
-.idea
-*.iml
-src/libs/*
-!src/libs/*.xml
-node_modules
-.settings
-dist
-.stage
