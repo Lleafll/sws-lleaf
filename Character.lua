@@ -125,12 +125,16 @@ function CharacterModule:AddToStatsPane()
 end
 
 function CharacterModule:CalculateTotalScore(spec)
+	if spec.Total then
+		return spec.Total
+	end
+	
+	local specScore = 0;
+	
 	if(ScoreCache[spec.Name]) then
 		return ScoreCache[spec.Name]
 	end
-
-	local specScore = 0;
-
+	
 	for i = 0, 19 do
 		local link = GetInventoryItemLink("player", i);
 		if(link) then

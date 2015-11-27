@@ -428,6 +428,13 @@ function OptionsModule:CreateOptionsForSpec(key)
                 end,
                 order = 20
             },
+			Total = {
+				type = "input",
+                name = "Total",
+                --desc = L["Options_Specialization_Tooltip"],
+				width = "full",
+                order = 21
+			},
             Stats = {
                 type = "multiselect",
                 name = L["Options_SelectStats_Label"],
