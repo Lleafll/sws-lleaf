@@ -122,62 +122,81 @@ local function calculateScore(link, loc, spec, tooltip, cmMode)
     end
 end
 
+local slotTable = {}  -- 
 local function GetScoreDiff(link, itemId, score, spec, cmMode)
     local itemName, _, _, itemLevel, _, _, _, _, loc = GetItemInfo(link);
-    local slots = ItemModule.SlotMap[loc];
+    local slots = ItemModule.SlotMap[loc];  -- hier muss evtl. equipment set rein
     if(not slots) then
         return 0, 0;
     end
-
+	
     local diff = 0;
     local offhandDiff = 0;
     local minEquippedScore = -1;
-
+	
     local scoreTable = {};
     local oneHand = false;
     local isEquipped = false;
     local locStr = getglobal(loc);
-
+	
     local isEquippedItem = function(comparedItemId, comparedItemLevel, comparedScore)
         local scoreGem = score.Gem and score.Gem.Value..score.Gem.Stat or "";
         local comparedScoreGem = comparedScore.Gem and comparedScore.Gem.Value..comparedScore.Gem.Stat or "";
 
         return comparedItemId == itemId and comparedItemLevel == itemLevel and scoreGem == comparedScoreGem;
     end
+	
+	local function processLink(slot, equippedLink)
+		local equippedItemName, _, _, equippedItemLevel, _, _, _, _,equippedLoc = GetItemInfo(equippedLink);
+		local equippedLocStr = getglobal(equippedLoc);
+		local equippedItemId = ItemModule:GetItemLinkInfo(equippedLink).itemId;
+		oneHand = oneHand or (equippedLocStr == INVTYPE_WEAPON or (SpecModule:IsDualWielding2h() and locStr == INVTYPE_2HWEAPON));
 
+		local equippedScore = calculateScore(equippedLink, equippedLoc, spec, nil, cmMode);
+		if(equippedScore) then
+			scoreTable[slot] = equippedScore;
+
+			local uniqueFamily, maxUniqueEquipped = GetItemUniqueness(link);
+			if(uniqueFamily == -1 and maxUniqueEquipped == 1 and ItemModule:AreUniquelyExclusive(itemName, GetItemInfo(equippedLink))) then
+				minEquippedScore = equippedScore.Score;
+				return true
+			end
+
+			if(not isEquippedItem(equippedItemId, equippedItemLevel, equippedScore)) then
+				if(equippedScore.Score < minEquippedScore or minEquippedScore == -1) then
+					minEquippedScore = equippedScore.Score;
+				end
+			else
+				isEquipped = true;
+			end
+		elseif(cmMode) then
+			isEquipped = true;
+		end
+	end
+	
+	local _, _, setEquipped = spec.EquipmentSet and GetEquipmentSetInfoByName(spec.EquipmentSet)
     for _, slot in pairs(slots) do
-        local equippedLink = GetInventoryItemLink("player", slot);
+		local equippedLink
+		if spec.EquipmentSet and not setEquipped then
+			local location = GetEquipmentSetLocations(spec.EquipmentSet)[slot]
+			if location then
+				local _, _, _, _, bagSlot, bag = EquipmentManager_UnpackLocation(location)
+				if bag then
+					equippedLink = GetContainerItemLink(bag, bagSlot)
+				end
+			end
+		end
+		if not equippedLink then
+			equippedLink = GetInventoryItemLink("player", slot)
+		end
         if(equippedLink) then
-            local equippedItemName, _, _, equippedItemLevel, _, _, _, _,equippedLoc = GetItemInfo(equippedLink);
-            local equippedLocStr = getglobal(equippedLoc);
-            local equippedItemId = ItemModule:GetItemLinkInfo(equippedLink).itemId;
-            oneHand = oneHand or (equippedLocStr == INVTYPE_WEAPON or (SpecModule:IsDualWielding2h() and locStr == INVTYPE_2HWEAPON));
-
-            local equippedScore = calculateScore(equippedLink, equippedLoc, spec, nil, cmMode);
-            if(equippedScore) then
-                scoreTable[slot] = equippedScore;
-
-                local uniqueFamily, maxUniqueEquipped = GetItemUniqueness(link);
-                if(uniqueFamily == -1 and maxUniqueEquipped == 1 and ItemModule:AreUniquelyExclusive(itemName, GetItemInfo(equippedLink))) then
-                    minEquippedScore = equippedScore.Score;
-                    break;
-                end
-
-                if(not isEquippedItem(equippedItemId, equippedItemLevel, equippedScore)) then
-                    if(equippedScore.Score < minEquippedScore or minEquippedScore == -1) then
-                        minEquippedScore = equippedScore.Score;
-                    end
-                else
-                    isEquipped = true;
-                end
-            elseif(cmMode) then
-                isEquipped = true;
-            end
+            local abort = processLink(slot, equippedLink)
+			if abort then break end
         elseif(slot ~= 17) then
             minEquippedScore = 0
         end
     end
-
+	
     if(isEquipped) then
         diff = 0
     elseif(locStr == INVTYPE_WEAPON or (SpecModule:IsDualWielding2h() and locStr == INVTYPE_2HWEAPON)) then

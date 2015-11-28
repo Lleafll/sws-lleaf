@@ -88,7 +88,6 @@ function ItemLink:RemoveBonus(bonus)
     for i, b in pairs(self.bonuses) do
         if(b == bonus) then
             table.remove(self.bonuses, i);
-			--print(self:HasBonus(bonus))
             break;
         end
     end
@@ -123,20 +122,13 @@ function ItemLink:ToString()
 		end
 
         for _, bonus in ipairs(self.bonuses) do
-			--print(bonus)
             link = link..":"..bonus;
         end
     end
 
-	--print(link)
-
     if(self.upgradeType ~= "0" and not self:HasBonus("529") and not self:HasBonus("530") and not self:HasBonus("531")) then  -- check bonuses to not overwrite upgrades (hacky, do fix)
         link = link..":"..self.upgradeId;
     end
-	
-	--print(self.upgradeType)
-	--print(link)
-	--print(link.."|h["..self.text.."]|h|r")
 	
     return link.."|h["..self.text.."]|h|r"
 end
