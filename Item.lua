@@ -265,13 +265,24 @@ function ItemModule:CreateMaps()
     self.BalefulUpgradeMap = {
         ["BASE"] = {
             To = "651",
-            Desc =  ITEM_QUALITY4_DESC
+            Desc = ITEM_QUALITY4_DESC
         },
         ["651"] = {
             To = "648",
             Desc = L["Empowered_Upgrade_Label"]
         },
     };
+	
+	self.ValorUpgradeMap = {
+		["529"] = {
+			To = "531",
+			Desc = "2/2 Valor Upgrades"
+		},
+		["530"] = {
+			To = "531",
+			Desc = "2/2 Valor Upgrades"
+		},
+	}
 end
 
 function ItemModule:OnInitialize()
@@ -385,6 +396,16 @@ function ItemModule:GetBalefulUpgradeBonus(itemLink)
     return nil;
 end
 
+function ItemModule:GetValorUpgradeBonus(itemLink)
+	for b, _ in pairs(self.ValorUpgradeMap) do
+        if(itemLink:HasBonus(b)) then
+            return b;
+        end
+    end
+
+    return nil;
+end
+
 local function GenerateUpgrades(map, bonusFrom, link)
     local upgrades = {};
 
@@ -416,11 +437,14 @@ function ItemModule:GetUpgrades(link)
 
     local craftedBonus = self:GetCraftedUpgradeBonus(itemLink);
     local balefulBonus = self:GetBalefulUpgradeBonus(itemLink);
+	local valorBonus = self:GetValorUpgradeBonus(itemLink);
 
     if(craftedBonus) then
         return GenerateUpgrades(self.CraftingUpgradeMap, craftedBonus, itemLink);
     elseif(balefulBonus) then
         return GenerateUpgrades(self.BalefulUpgradeMap, balefulBonus, itemLink);
+	elseif(valorBonus) then
+		return GenerateUpgrades(self.ValorUpgradeMap, valorBonus, itemLink);
     end
 
     return upgrades;

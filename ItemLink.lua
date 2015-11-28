@@ -88,12 +88,13 @@ function ItemLink:RemoveBonus(bonus)
     for i, b in pairs(self.bonuses) do
         if(b == bonus) then
             table.remove(self.bonuses, i);
+			--print(self:HasBonus(bonus))
             break;
         end
     end
 end
 
-function ItemLink:AddBonus(bonus)
+function ItemLink:AddBonus(bonus)	
     table.insert(self.bonuses, bonus);
 end
 
@@ -115,17 +116,28 @@ function ItemLink:ToString()
         self.instanceDifficultyId);
 
     if(self.bonuses)then
-        link = link..":"..#self.bonuses;
+		if self:HasBonus("529") or self:HasBonus("530") or self:HasBonus("531") then
+			link = link..":"..#self.bonuses-1;
+		else
+			link = link..":"..#self.bonuses;
+		end
 
         for _, bonus in ipairs(self.bonuses) do
+			--print(bonus)
             link = link..":"..bonus;
         end
     end
 
-    if(self.upgradeType ~= "0") then
+	--print(link)
+
+    if(self.upgradeType ~= "0" and not self:HasBonus("529") and not self:HasBonus("530") and not self:HasBonus("531")) then  -- check bonuses to not overwrite upgrades (hacky, do fix)
         link = link..":"..self.upgradeId;
     end
-
+	
+	--print(self.upgradeType)
+	--print(link)
+	--print(link.."|h["..self.text.."]|h|r")
+	
     return link.."|h["..self.text.."]|h|r"
 end
 

@@ -393,6 +393,13 @@ function OptionsModule:CreateOptionsForSpec(key)
                 desc = L["Options_EnabledSpec_Tooltip"],
                 order = 13
             },
+			EquipmentSet = {  -- evtl. durch dropdown menu aller sets ersetzen -> GetNumEquipmentSets -> GetEquipmentSetInfo
+				type = "input",
+                name = "Associated Equipment Set",
+                --desc = L["Options_Specialization_Tooltip"],
+				width = "full",
+                order = 14
+			},
             GemStat = {
                 type = "select",
                 name = L["Options_GemStat_Label"],
