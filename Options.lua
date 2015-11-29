@@ -393,13 +393,6 @@ function OptionsModule:CreateOptionsForSpec(key)
                 desc = L["Options_EnabledSpec_Tooltip"],
                 order = 13
             },
-			EquipmentSet = {  -- evtl. durch dropdown menu aller sets ersetzen -> GetNumEquipmentSets -> GetEquipmentSetInfo
-				type = "input",
-                name = "Associated Equipment Set",
-                --desc = L["Options_Specialization_Tooltip"],
-				width = "full",
-                order = 14
-			},
             GemStat = {
                 type = "select",
                 name = L["Options_GemStat_Label"],
@@ -435,12 +428,17 @@ function OptionsModule:CreateOptionsForSpec(key)
                 end,
                 order = 20
             },
+			EquipmentSet = {  -- evtl. durch dropdown menu aller sets ersetzen -> GetNumEquipmentSets -> GetEquipmentSetInfo
+				type = "input",
+                name = "Associated Equipment Set",
+                --desc = L["Options_Specialization_Tooltip"],
+                order = 21
+			},
 			Total = {
 				type = "input",
-                name = "Total",
+                name = "Total Stats",
                 --desc = L["Options_Specialization_Tooltip"],
-				width = "full",
-                order = 21
+                order = 22
 			},
             Stats = {
                 type = "multiselect",

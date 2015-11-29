@@ -1,17 +1,13 @@
 ## Interface: 60200
 ## X-Min-Interface: 60000
-## Title:Stat Weight Score
+## Title:Stat Weight Score - Lleaf Edit
 ## Notes:Calculates a score of an item based on stat weights and the item's stats
-## Author: Necroskillz
+## Author: Lleaf
 ## Version: 1.12.2
 ## SavedVariables: StatWeightScoreDB
 ## LoadOnDemand: 0
 ## DefaultState: enabled
 ## OptionalDeps: Ace3, LibBabble-Inventory-3.0
-## X-Curse-Packaged-Version: 1.12.2
-## X-Curse-Project-Name: Stat Weight Score
-## X-Curse-Project-ID: stat-weight-score
-## X-Curse-Repository-ID: wow/stat-weight-score/mainline
 
 libs\libs.xml
 localization\localization.xml
