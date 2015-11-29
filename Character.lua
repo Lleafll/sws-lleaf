@@ -3,6 +3,7 @@ local CharacterModule = StatWeightScore:NewModule(SWS_ADDON_NAME.."Character");
 
 local ScoreModule;
 local SpecModule;
+local StatsModule;
 local ScanningTooltipModule;
 local BaseStatsModule;
 
@@ -16,6 +17,7 @@ function CharacterModule:OnInitialize()
     SpecModule = StatWeightScore:GetModule(SWS_ADDON_NAME.."Spec");
     ScanningTooltipModule = StatWeightScore:GetModule(SWS_ADDON_NAME.."ScanningTooltip");
 	BaseStatsModule = StatWeightScore:GetModule(SWS_ADDON_NAME.."BaseStats");
+	StatsModule = StatWeightScore:GetModule(SWS_ADDON_NAME.."Stats");
     L = StatWeightScore.L;
     Utils = StatWeightScore.Utils;
 
@@ -126,7 +128,17 @@ end
 
 function CharacterModule:CalculateTotalScore(spec)
 	if spec.Total then
-		return spec.Total
+		if spec.Normalize then
+			for stat, weight in pairs(spec.Weights) do
+                local statInfo = StatsModule:GetStatInfo(stat);
+                if statInfo.Primary then
+					return spec.Total / weight
+                end
+            end
+			return spec.Total
+        else
+			return spec.Total
+		end
 	end
 	
 	local specScore = 0;
