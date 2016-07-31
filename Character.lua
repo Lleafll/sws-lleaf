@@ -132,13 +132,13 @@ function CharacterModule:CalculateTotalScore(spec)
 	if spec.Total then
 		if spec.Normalize then
 			for stat, weight in pairs(spec.Weights) do
-                local statInfo = StatsModule:GetStatInfo(stat);
-                if statInfo.Primary then
-					return spec.Total / weight
-                end
-            end
+        local statInfo = StatsModule:GetStatInfo(stat);
+        if statInfo.Primary then
+          return spec.Total / weight
+        end
+      end
 			return spec.Total
-        else
+    else
 			return spec.Total
 		end
 	end
@@ -164,7 +164,7 @@ function CharacterModule:CalculateTotalScore(spec)
 		end
 	end
 	
-	if UnitLevel("player") == 100 then
+	if UnitLevel("player") >= 100 then
 		specScore = specScore + BaseStatsModule:GetBaseScore(spec)
 	end
 
