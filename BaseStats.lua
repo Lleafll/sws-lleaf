@@ -5,7 +5,7 @@ local SpecModule;
 local StatsModule;
 
 function BaseStatsModule:OnInitialize()
-    SpecModule = StatWeightScore:GetModule(SWS_ADDON_NAME.."Spec");
+  SpecModule = StatWeightScore:GetModule(SWS_ADDON_NAME.."Spec");
 	StatsModule = StatWeightScore:GetModule(SWS_ADDON_NAME.."Stats");
 end	
 
@@ -212,7 +212,6 @@ function BaseStatsModule:GetBaseScore(spec)
 	baseScore = baseScore + calculateScore("mastery", 550)
 	baseScore = baseScore + calculateScore("haste", 450)
 	baseScore = baseScore + calculateScore("crit", 550)
-	baseScore = baseScore + calculateScore("multistrike", 330)
 	baseScore = baseScore + calculateScore("versatility", 390)
 	
 	-- buff food, flask, rune
