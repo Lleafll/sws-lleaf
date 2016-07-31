@@ -323,7 +323,7 @@ function TooltipModule:AddToTooltip(tooltip, compare)
                             upgradeDiff, upgradeOffhandDiff = GetScoreDiff(upgrade.Link, itemId, upgradeScore, spec, cmMode);
                         end
 
-                        tooltip:AddDoubleLine(upgrade.Desc, FormatScore(upgradeScore.Score, upgradeDiff, disabled, characterScore, db.PercentageCalculationType));
+                        tooltip:AddDoubleLine(string.format(L["TooltipMessage_Offhand"], upgrade.Desc), FormatScore(upgradeScore.Score, upgradeDiff, disabled, characterScore, db.PercentageCalculationType));
 
                         if(score.Offhand ~= nil) then
                             tooltip:AddDoubleLine(string.format(L["TooltipMessage_Offhand"], upgrade.Desc), FormatScore(upgradeScore.Score, upgradeDiff, disabled, characterScore, db.PercentageCalculationType));
