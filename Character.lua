@@ -96,6 +96,7 @@ function CharacterModule:UpdateStatCategory()
 end
 
 function CharacterModule:AddToStatsPane()
+  --[[
     if(not StatWeightScore.db.profile.ShowStatsPane or PAPERDOLL_STATCATEGORIES[SWS_ADDON_NAME]) then
         return;
     end
@@ -103,7 +104,7 @@ function CharacterModule:AddToStatsPane()
     local lastId = -1;
 
     for _, cat in pairs(PAPERDOLL_STATCATEGORIES) do
-        if(cat.id > lastId) then
+        if cat.id and cat.id > lastId then
             lastId = cat.id;
         end
     end
@@ -124,6 +125,7 @@ function CharacterModule:AddToStatsPane()
         _G["STAT_CATEGORY_"..SWS_ADDON_NAME] = L["StatPaneCategoryTitle"];
         CreateFrame("Frame", frameName, CharacterStatsPaneScrollChild, "StatGroupTemplate");
     end
+  ]]--
 end
 
 function CharacterModule:CalculateTotalScore(spec)
