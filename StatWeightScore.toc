@@ -1,9 +1,9 @@
-## Interface: 60200
-## X-Min-Interface: 60000
+## Interface: 70000
+## X-Min-Interface: 70000
 ## Title:Stat Weight Score - Lleaf Edit
 ## Notes:Calculates a score of an item based on stat weights and the item's stats
 ## Author: Lleaf
-## Version: 1.12.2
+## Version: Legion
 ## SavedVariables: StatWeightScoreDB
 ## LoadOnDemand: 0
 ## DefaultState: enabled
