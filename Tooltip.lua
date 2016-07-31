@@ -177,7 +177,7 @@ local function GetScoreDiff(link, itemId, score, spec, cmMode)
 	local _, _, setEquipped = spec.EquipmentSet and GetEquipmentSetInfoByName(spec.EquipmentSet)
     for _, slot in pairs(slots) do
 		local equippedLink
-		if spec.EquipmentSet and not setEquipped then
+		if spec.EquipmentSet and spec.EquipmentSet ~= "" and not setEquipped then
 			local location = GetEquipmentSetLocations(spec.EquipmentSet)[slot]
 			if location then
 				local _, _, _, _, bagSlot, bag = EquipmentManager_UnpackLocation(location)
