@@ -49,7 +49,6 @@ function StatsModule:OnInitialize()
     AddStat("crit", "ITEM_MOD_CRIT_RATING_SHORT", { Gem = true, AltDisplayNames = L["AlternativeStatDisplayNames_Crit"] });
     AddStat("haste", "ITEM_MOD_HASTE_RATING_SHORT", { Gem = true });
     AddStat("sp", "ITEM_MOD_SPELL_POWER_SHORT", { AltDisplayNames = L["AlternativeStatDisplayNames_Spellpower"] });
-    AddStat("multistrike", "ITEM_MOD_CR_MULTISTRIKE_SHORT", { Gem = true });
     AddStat("versatility", "ITEM_MOD_VERSATILITY", { Gem = true });
 
     AddStat("avoidance", "ITEM_MOD_CR_AVOIDANCE_SHORT");

@@ -35,7 +35,6 @@ local function CreateAmrMaps()
     map("AttackPower", "ap");
     map("SpellPower", "sp");
     map("Haste", "haste");
-    map("Multistrike", "multistrike");
     map("Versatility", "versatility");
     map("Avoidance", "avoidance");
     map("Leech", "leech");
@@ -64,7 +63,6 @@ local function CreatePawnMap()
     map("Ap", "ap");
     map("SpellPower", "sp");
     map("HasteRating", "haste");
-    map("Multistrike", "multistrike");
     map("Versatility", "versatility");
     map("Avoidance", "avoidance");
     map("Leech", "leech");
@@ -78,7 +76,6 @@ local function ImportSimulationCraftXML(input)
 
     local simulationCraftStatMap = {
         ["Wdps"] = "dps",
-        ["Mult"] = "multistrike",
         ["Vers"] = "versatility",
     };
 
