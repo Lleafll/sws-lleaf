@@ -131,5 +131,6 @@ L["TooltipMessage_StatScore"] = "Stat score"
 L["TooltipMessage_WithGem"] = "with gem"
 L["TooltipMessage_WithProcAverage"] = "with proc average"
 L["TooltipMessage_WithUseAverage"] = "with use on cd avg"
+L["TooltipMessage_Offhand"] = "%s (offhand)";
 L["Warning"] = "Warning"
 L["WelcomeMessage"] = "loaded. v%s by Necroskillz"
